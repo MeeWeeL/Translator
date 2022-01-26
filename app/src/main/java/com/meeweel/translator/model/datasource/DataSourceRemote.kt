@@ -5,8 +5,8 @@ import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.retrofit.RetrofitImpl
 import com.meeweel.translator.model.datasource.room.convertDataModelListToEntityList
 import com.meeweel.translator.model.datasource.room.convertDataModelToEntity
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DataSourceRemote(private val remoteProvider: RetrofitImpl = RetrofitImpl()) :
     DataSource<List<DataModel>> {

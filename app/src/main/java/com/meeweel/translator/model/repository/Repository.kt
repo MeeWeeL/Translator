@@ -1,6 +1,7 @@
 package com.meeweel.translator.model.repository
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
+
 
 interface Repository<T> {
 

@@ -3,7 +3,7 @@ package com.meeweel.translator.model.datasource.room
 import com.meeweel.translator.model.App
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.DataSource
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class RoomDataBaseImpl : DataSource<List<DataModel>> {
 

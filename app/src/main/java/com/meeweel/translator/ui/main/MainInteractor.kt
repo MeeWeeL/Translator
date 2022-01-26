@@ -4,7 +4,7 @@ import com.meeweel.translator.model.data.AppState
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.repository.Repository
 import com.meeweel.translator.presenter.Interactor
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class MainInteractor(
     private val remoteRepository: Repository<List<DataModel>>,
