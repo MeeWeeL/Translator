@@ -17,13 +17,19 @@ import com.meeweel.translator.ui.base.BaseActivity
 import com.meeweel.translator.ui.base.BaseViewModel
 import com.meeweel.translator.ui.base.View
 import com.meeweel.translator.ui.main.adapter.MainAdapter
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private lateinit var binding: ActivityMainBinding
-    val model: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java) // Saving here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
+    lateinit var model: MainViewModel
+//    val model: MainViewModel by lazy {
+//        ViewModelProvider(this).get(MainViewModel::class.java) // Saving here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//    }
 
     private val observer = Observer<AppState> {
         renderData(it)
@@ -37,10 +43,15 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        model.liveData.observe(this@MainActivity, observer)
+
+//        model = viewModelFactory.create(MainViewModel::class.java)
+        model = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        model.liveData().observe(this@MainActivity, observer)
 //        model.reloadSavedState()
         binding.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()

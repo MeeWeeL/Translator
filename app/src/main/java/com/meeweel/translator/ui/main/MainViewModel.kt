@@ -11,14 +11,13 @@ import com.meeweel.translator.rx.ISchedulerProvider
 import com.meeweel.translator.rx.SchedulerProvider
 import com.meeweel.translator.ui.base.BaseViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.observers.DisposableObserver
+import javax.inject.Inject
 
 
-class MainViewModel(
-    private val interactor: MainInteractor = MainInteractor(
-        RepositoryImpl(DataSourceRemote()),
-        RepositoryImpl(DataSourceLocal())
-    )
+class MainViewModel @Inject constructor(
+    private val interactor: MainInteractor
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -28,7 +27,9 @@ class MainViewModel(
     private val liveDataForViewToObserve: MutableLiveData<AppState> = MutableLiveData()
 
 //    private val liveDataWord: LiveData<String> = liveDataWordToSave
-    val liveData: LiveData<AppState> = liveDataForViewToObserve
+    fun liveData(): LiveData<AppState> {
+        return liveDataForViewToObserve
+    }
 
 
     fun getData(word: String, isOnline: Boolean) {
@@ -37,8 +38,7 @@ class MainViewModel(
             interactor.getData(word, isOnline)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .doOnSubscribe{ liveDataForViewToObserve.value = AppState.Loading(null) }
-
+                .doOnSubscribe{ doOnSubscribe() }
                 .subscribeWith(getObserver())
         )
     }
@@ -47,6 +47,9 @@ class MainViewModel(
 //        val word = liveDataWord.value
 //        if (word != null) getData(word, true)
 //    }
+
+    private fun doOnSubscribe(): (Disposable) -> Unit =
+        { liveDataForViewToObserve.value = AppState.Loading(null) }
 
     private fun getObserver(): DisposableObserver<AppState> {
         return object : DisposableObserver<AppState>() {
