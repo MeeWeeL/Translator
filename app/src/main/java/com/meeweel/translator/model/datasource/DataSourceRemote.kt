@@ -13,15 +13,23 @@ class DataSourceRemote(private val remoteProvider: RetrofitImpl = RetrofitImpl()
 
     val db = App.create().getEntityDao()
 
-    override fun getData(word: String): Observable<List<DataModel>> {
+    override suspend fun getData(word: String): List<DataModel> {
         db.getWordByText("week")
         val a = remoteProvider
             .getData(word).apply {
-                this.subscribeOn(Schedulers.io()).observeOn(Schedulers.computation())
-                    .subscribe({
-                        db.insertList(convertDataModelListToEntityList(it))
-                    },{})
+                        db.insertList(convertDataModelListToEntityList(this))
             }
         return a
     }
+//    override fun getData(word: String): Observable<List<DataModel>> {
+//        db.getWordByText("week")
+//        val a = remoteProvider
+//            .getData(word).apply {
+//                this.subscribeOn(Schedulers.io()).observeOn(Schedulers.computation())
+//                    .subscribe({
+//                        db.insertList(convertDataModelListToEntityList(it))
+//                    },{})
+//            }
+//        return a
+//    }
 }

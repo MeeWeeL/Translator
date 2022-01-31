@@ -9,9 +9,11 @@ class RoomDataBaseImpl : DataSource<List<DataModel>> {
 
     private val db = App.create().getEntityDao()
 
-    override fun getData(word: String): Observable<List<DataModel>> {
-        return db.getWordByText(word).flatMap {
-            Observable.just(convertEntityListToDataModelList(it))
-        }
+    override suspend fun getData(word: String): List<DataModel> {
+//    override fun getData(word: String): Observable<List<DataModel>> {
+        return convertEntityListToDataModelList(db.getWordByText(word))
+//        return db.getWordByText(word).flatMap {
+//            Observable.just(convertEntityListToDataModelList(it))
+//        }
     }
 }

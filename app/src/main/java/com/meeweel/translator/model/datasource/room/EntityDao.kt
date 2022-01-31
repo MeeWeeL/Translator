@@ -10,10 +10,12 @@ import io.reactivex.rxjava3.core.Observable
 interface EntityDao {
 
     @Query("SELECT * FROM Entity")
-    fun getAll(): Observable<List<Entity>>
+    fun getAll(): List<Entity>
+//    fun getAll(): Observable<List<Entity>>
 
     @Query("SELECT * FROM Entity WHERE text LIKE :text")
-    fun getWordByText(text: String): Observable<List<Entity>>
+    fun getWordByText(text: String): List<Entity>
+//    fun getWordByText(text: String): Observable<List<Entity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(entity: Entity)

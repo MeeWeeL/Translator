@@ -5,5 +5,6 @@ import io.reactivex.rxjava3.core.Observable
 
 interface Repository<T> {
 
-    fun getData(word: String): Observable<T>
+    suspend fun getData(word: String): T
+//    fun getData(word: String): Observable<T>
 }

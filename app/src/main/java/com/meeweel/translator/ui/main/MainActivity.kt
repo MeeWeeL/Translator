@@ -19,11 +19,12 @@ import com.meeweel.translator.ui.base.View
 import com.meeweel.translator.ui.main.adapter.MainAdapter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+//    @Inject
+//    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var binding: ActivityMainBinding
     lateinit var model: MainViewModel
@@ -31,10 +32,15 @@ class MainActivity : AppCompatActivity() {
 //        ViewModelProvider(this).get(MainViewModel::class.java) // Saving here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //    }
 
-    private val observer = Observer<AppState> {
-        renderData(it)
+    private val fabClickListener: android.view.View.OnClickListener = android.view.View.OnClickListener {
+        val searchDialogFragment = SearchDialogFragment.newInstance()
+        searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
+        searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
     }
-    private var adapter: MainAdapter? = null
+    private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
+            override fun onClick(searchWord: String) { model.getData(searchWord, true) }
+        }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
@@ -42,28 +48,56 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    private val observer = Observer<AppState> {
+        renderData(it)
+    }
+    private var adapter: MainAdapter? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+//        AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        iniViewModel()
+        initViews()
 
-//        model = viewModelFactory.create(MainViewModel::class.java)
-        model = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        model.liveData().observe(this@MainActivity, observer)
-//        model.reloadSavedState()
-        binding.searchFab.setOnClickListener {
-            val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    model.getData(searchWord, true)
-                }
-            })
-            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-        }
+//        model = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+//        model.liveData().observe(this@MainActivity, observer)
+
+//        binding.searchFab.setOnClickListener {
+//            val searchDialogFragment = SearchDialogFragment.newInstance()
+//            searchDialogFragment.setOnSearchClickListener(object :
+//                SearchDialogFragment.OnSearchClickListener {
+//                override fun onClick(searchWord: String) {
+//                    model.getData(searchWord, true)
+//                }
+//            })
+//            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
+//        }
     }
+
+
+    private fun initViews() {
+        binding.searchFab.setOnClickListener(fabClickListener)
+        binding.mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
+        binding.mainActivityRecyclerview.adapter = adapter
+    }
+
+    private fun iniViewModel() {
+        // Убедимся, что модель инициализируется раньше View
+        if (binding.mainActivityRecyclerview.adapter != null) {
+            throw IllegalStateException("The ViewModel should be initialised first")
+        }
+        // Теперь ViewModel инициализируется через функцию by viewModel()
+        // Это функция, предоставляемая Koin из коробки через зависимость
+        // import org.koin.androidx.viewmodel.ext.android.viewModel
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        model.liveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+    }
+
 
     private fun renderData(appState: AppState) {
         when (appState) {

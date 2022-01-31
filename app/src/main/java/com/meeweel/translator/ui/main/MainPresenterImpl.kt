@@ -38,17 +38,17 @@ class MainPresenterImpl<T : AppState, V : View>(
     }
     // Стандартный код RxJava
     override fun getData(word: String, isOnline: Boolean) {
-        compositeDisposable.add(
-            interactor.getData(word, isOnline)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(schedulerProvider.io)
-//                .observeOn(schedulerProvider.ui())
-                // Как только начинается загрузка, передаём во View модель данных для
-                // отображения экрана загрузки
-                .doOnSubscribe { currentView?.renderData(AppState.Loading(null)) }
-                .subscribeWith(getObserver())
-        )
+//        compositeDisposable.add(
+//            interactor.getData(word, isOnline)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+////                .subscribeOn(schedulerProvider.io)
+////                .observeOn(schedulerProvider.ui())
+//                // Как только начинается загрузка, передаём во View модель данных для
+//                // отображения экрана загрузки
+//                .doOnSubscribe { currentView?.renderData(AppState.Loading(null)) }
+//                .subscribeWith(getObserver())
+//        )
     }
 
     private fun getObserver(): DisposableObserver<AppState> {
