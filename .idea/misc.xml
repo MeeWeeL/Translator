@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/activity_description.xml" value="0.20018115942028986" />
+        <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/activity_history.xml" value="0.20018115942028986" />
+        <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/activity_history_recyclerview_item.xml" value="0.20018115942028986" />
         <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/activity_main.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/dialog_layout.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/ist_item_layout.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/Me/AndroidStudioProjects/Translator/app/src/main/res/layout/loading_layout.xml" value="0.20018115942028986" />
       </map>
     </option>
   </component>

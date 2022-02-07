@@ -24,6 +24,24 @@
             android:layout_marginBottom="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab2"
+            android:src="@drawable/ic_search_from_history"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="85dp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab3"
+            android:src="@drawable/ic_history"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="155dp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_height="wrap_content"/>
     </FrameLayout>
 
     <FrameLayout

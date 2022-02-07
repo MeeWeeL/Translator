@@ -16,4 +16,8 @@ class RoomDataBaseImpl : DataSource<List<DataModel>> {
 //            Observable.just(convertEntityListToDataModelList(it))
 //        }
     }
+    override suspend fun getData(): List<DataModel> {
+        return convertEntityListToDataModelList(db.getAll())
+//        }
+    }
 }

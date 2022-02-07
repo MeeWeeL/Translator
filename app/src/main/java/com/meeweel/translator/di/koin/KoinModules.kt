@@ -2,11 +2,15 @@ package com.meeweel.translator.di.koin
 
 import com.meeweel.translator.di.NAME_LOCAL
 import com.meeweel.translator.di.NAME_REMOTE
+import com.meeweel.translator.model.data.AppState
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.retrofit.RetrofitImpl
 import com.meeweel.translator.model.datasource.room.RoomDataBaseImpl
 import com.meeweel.translator.model.repository.Repository
 import com.meeweel.translator.model.repository.RepositoryImpl
+import com.meeweel.translator.presenter.HistoryInteractor
+import com.meeweel.translator.ui.history.HistoryInteractorImpl
+import com.meeweel.translator.ui.history.HistoryViewModel
 import com.meeweel.translator.ui.main.MainInteractor
 import com.meeweel.translator.ui.main.MainViewModel
 import org.koin.core.qualifier.named
@@ -24,4 +28,9 @@ val application = module {
 val mainScreen = module {
     factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
     factory { MainViewModel(get()) }
+}
+
+val historyScreen = module {
+    factory { HistoryViewModel(get()) }
+    factory { HistoryInteractorImpl(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
 }

@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Observable
 interface EntityDao {
 
     @Query("SELECT * FROM Entity")
-    fun getAll(): List<Entity>
+    suspend fun getAll(): List<Entity>
 //    fun getAll(): Observable<List<Entity>>
 
     @Query("SELECT * FROM Entity WHERE text LIKE :text")
