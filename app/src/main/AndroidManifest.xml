@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Translator">
-        <activity android:name=".ui.history.HistoryActivity"/>
+        <activity android:name="com.meeweel.historyscreen.HistoryActivity"/>
         <activity android:name=".ui.description.DescriptionActivity"/>
         <activity
             android:name=".ui.main.MainActivity"

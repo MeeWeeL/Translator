@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.meeweel.translator.R
-import com.meeweel.translator.model.data.DataModel
+import com.meeweel.model.DataModel
 
 class MainAdapter(
     private var onListItemClickListener: OnListItemClickListener,
-    private var data: List<DataModel>
+    private var data: List<com.meeweel.model.DataModel>
 ) :
     RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
 
-    fun setData(data: List<DataModel>) {
+    fun setData(data: List<com.meeweel.model.DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -36,7 +36,7 @@ class MainAdapter(
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(data: DataModel) {
+        fun bind(data: com.meeweel.model.DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 itemView.findViewById<TextView>(R.id.header_textview_recycler_item).text = data.text
                 itemView.findViewById<TextView>(R.id.description_textview_recycler_item).text =
@@ -46,11 +46,11 @@ class MainAdapter(
         }
     }
 
-    private fun openInNewWindow(listItemData: DataModel) {
+    private fun openInNewWindow(listItemData: com.meeweel.model.DataModel) {
         onListItemClickListener.onItemClick(listItemData)
     }
 
     interface OnListItemClickListener {
-        fun onItemClick(data: DataModel)
+        fun onItemClick(data: com.meeweel.model.DataModel)
     }
 }

@@ -5,18 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.meeweel.translator.model.App
-import com.meeweel.translator.model.data.AppState
-import com.meeweel.translator.model.datasource.DataSourceLocal
-import com.meeweel.translator.model.datasource.DataSourceRemote
-import com.meeweel.translator.model.repository.RepositoryImpl
-import com.meeweel.translator.rx.ISchedulerProvider
-import com.meeweel.translator.rx.SchedulerProvider
-import com.meeweel.translator.ui.base.BaseViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.observers.DisposableObserver
+import com.meeweel.model.AppState
+//import io.reactivex.rxjava3.disposables.Disposable
+//import io.reactivex.rxjava3.observers.DisposableObserver
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 
 class MainViewModel(
@@ -33,9 +25,9 @@ class MainViewModel(
     }
     )
 
-    private val liveDataForViewToObserve: MutableLiveData<AppState> = MutableLiveData()
+    private val liveDataForViewToObserve: MutableLiveData<com.meeweel.model.AppState> = MutableLiveData()
 
-    fun liveData(): LiveData<AppState> {
+    fun liveData(): LiveData<com.meeweel.model.AppState> {
         return liveDataForViewToObserve
     }
 
@@ -51,7 +43,7 @@ class MainViewModel(
 
     fun getData(word: String, isOnline: Boolean) {
 //        liveDataWordToSave.value = word
-        liveDataForViewToObserve.value = AppState.Loading(null)
+        liveDataForViewToObserve.value = com.meeweel.model.AppState.Loading(null)
         cancelJob()
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
 //        compositeDisposable.add(
@@ -82,23 +74,23 @@ class MainViewModel(
         viewModelCoroutineScope.coroutineContext.cancelChildren()
     }
 
-    private fun doOnSubscribe(): (Disposable) -> Unit =
-        { liveDataForViewToObserve.value = AppState.Loading(null) }
-
-    private fun getObserver(): DisposableObserver<AppState> {
-        return object : DisposableObserver<AppState>() {
-            // Данные успешно загружены; сохраняем их и передаем во View (через
-            // LiveData). View сама разберётся, как их отображать
-            override fun onNext(state: AppState) {
-                liveDataForViewToObserve.value = state
-            }
-            // В случае ошибки передаём её в Activity таким же образом через LiveData
-            override fun onError(e: Throwable) {
-                liveDataForViewToObserve.value = AppState.Error(e)
-            }
-
-            override fun onComplete() {
-            }
-        }
-    }
+//    private fun doOnSubscribe(): (Disposable) -> Unit =
+//        { liveDataForViewToObserve.value = com.meeweel.model.AppState.Loading(null) }
+//
+//    private fun getObserver(): DisposableObserver<com.meeweel.model.AppState> {
+//        return object : DisposableObserver<com.meeweel.model.AppState>() {
+//            // Данные успешно загружены; сохраняем их и передаем во View (через
+//            // LiveData). View сама разберётся, как их отображать
+//            override fun onNext(state: com.meeweel.model.AppState) {
+//                liveDataForViewToObserve.value = state
+//            }
+//            // В случае ошибки передаём её в Activity таким же образом через LiveData
+//            override fun onError(e: Throwable) {
+//                liveDataForViewToObserve.value = com.meeweel.model.AppState.Error(e)
+//            }
+//
+//            override fun onComplete() {
+//            }
+//        }
+//    }
 }

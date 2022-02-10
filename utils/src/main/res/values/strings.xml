@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Translator</string>
+    <string name="error_textview_stub">Error</string>
+    <string name="reload_button">Reload</string>
+    <string name="undefined_error">Undefined error</string>
+    <string name="empty_server_response_on_success">Response from server is empty</string>
+    <string name="button_search">Search</string>
+    <string name="search_hint">New word</string>
+    <string name="delete_description">X</string>
+    <string name="dialog_title_stub">TITLE</string>
+    <string name="dialog_button_cancel">CANCEL</string>
+    <string name="image_stub">image_stub</string>
+    <string name="dialog_title_device_is_offline">offline</string>
+    <string name="dialog_message_device_is_offline">offline</string>
+    dialog_title_stub
+
+</resources>

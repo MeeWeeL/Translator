@@ -1,9 +1,7 @@
 package com.meeweel.translator.presenter
 
-import com.meeweel.translator.model.data.AppState
-import com.meeweel.translator.ui.base.View
 
-interface Presenter<T : AppState, V : View> {
+interface Presenter<T : com.meeweel.model.AppState, V : com.meeweel.core.base.View> {
 
     fun attachView(view: V)
 
