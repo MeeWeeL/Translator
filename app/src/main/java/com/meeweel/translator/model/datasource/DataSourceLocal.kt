@@ -2,7 +2,7 @@ package com.meeweel.translator.model.datasource
 
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.room.RoomDataBaseImpl
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class DataSourceLocal(private val remoteProvider: RoomDataBaseImpl = RoomDataBaseImpl()) :
     DataSource<List<DataModel>> {

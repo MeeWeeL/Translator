@@ -6,10 +6,10 @@ import com.meeweel.translator.model.datasource.DataSourceRemote
 import com.meeweel.translator.model.repository.RepositoryImpl
 import com.meeweel.translator.presenter.Presenter
 import com.meeweel.translator.ui.base.View
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.observers.DisposableObserver
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainPresenterImpl<T : AppState, V : View>(
     private val interactor: MainInteractor = MainInteractor(

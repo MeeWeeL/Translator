@@ -2,7 +2,7 @@ package com.meeweel.translator.model.repository
 
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.DataSource
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class RepositoryImpl(private val dataSource: DataSource<List<DataModel>>) :
     Repository<List<DataModel>> {
