@@ -1,5 +1,6 @@
 package com.meeweel.translator.model.datasource.retrofit
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.meeweel.translator.model.data.DataModel
 import com.meeweel.translator.model.datasource.BaseInterceptor
 import com.meeweel.translator.model.datasource.DataSource
@@ -13,8 +14,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitImpl : DataSource<List<DataModel>> {
 
-    override fun getData(word: String): Observable<List<DataModel>> {
-        return getService(BaseInterceptor.interceptor).search(word)
+    override suspend fun getData(word: String): List<DataModel> {
+//    override fun getData(word: String): Observable<List<DataModel>> {
+        return getService(BaseInterceptor.interceptor).search(word).await()
+//        return getService(BaseInterceptor.interceptor).search(word)
     }
 
     private fun getService(interceptor: Interceptor): ApiService {
@@ -25,7 +28,8 @@ class RetrofitImpl : DataSource<List<DataModel>> {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+//            .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
             .client(createOkHttpClient(interceptor))
             .build()
     }
