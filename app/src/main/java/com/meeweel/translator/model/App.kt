@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.room.Room
 //import com.meeweel.translator.di.DaggerAppComponent
 import com.meeweel.translator.di.koin.application
+import com.meeweel.translator.di.koin.historyScreen
 import com.meeweel.translator.di.koin.mainScreen
 import com.meeweel.translator.model.datasource.room.DBStorage
 import dagger.android.AndroidInjector
@@ -37,7 +38,7 @@ class App : Application() {
 //            .inject(this)
 
         startKoin {
-            modules(listOf(application, mainScreen))
+            modules(listOf(application, mainScreen, historyScreen))
         }
 
     }

@@ -21,6 +21,10 @@ class DataSourceRemote(private val remoteProvider: RetrofitImpl = RetrofitImpl()
             }
         return a
     }
+
+    override suspend fun getData(): List<DataModel> {
+        TODO("Not yet implemented")
+    }
 //    override fun getData(word: String): Observable<List<DataModel>> {
 //        db.getWordByText("week")
 //        val a = remoteProvider

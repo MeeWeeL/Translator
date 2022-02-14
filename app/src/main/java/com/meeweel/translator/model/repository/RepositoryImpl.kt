@@ -10,4 +10,8 @@ class RepositoryImpl(private val dataSource: DataSource<List<DataModel>>) :
 //    override fun getData(word: String): Observable<List<DataModel>> {
         return dataSource.getData(word)
     }
+
+    override suspend fun getData(): List<DataModel> {
+        return dataSource.getData()
+    }
 }

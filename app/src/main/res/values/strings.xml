@@ -7,4 +7,11 @@
     <string name="button_search">Search</string>
     <string name="search_hint">New word</string>
     <string name="delete_description">X</string>
+    <string name="dialog_title_stub">TITLE</string>
+    <string name="dialog_button_cancel">CANCEL</string>
+    <string name="image_stub">image_stub</string>
+    <string name="dialog_title_device_is_offline">offline</string>
+    <string name="dialog_message_device_is_offline">offline</string>
+    dialog_title_stub
+
 </resources>

@@ -8,5 +8,6 @@ class DataSourceLocal(private val remoteProvider: RoomDataBaseImpl = RoomDataBas
     DataSource<List<DataModel>> {
 
     override suspend fun getData(word: String): List<DataModel> = remoteProvider.getData(word)
+    override suspend fun getData(): List<DataModel> = remoteProvider.getData()
 //    override fun getData(word: String): Observable<List<DataModel>> = remoteProvider.getData(word)
 }

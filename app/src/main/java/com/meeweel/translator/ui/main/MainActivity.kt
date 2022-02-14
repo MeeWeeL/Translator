@@ -1,5 +1,6 @@
 package com.meeweel.translator.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -12,10 +13,12 @@ import com.meeweel.translator.R
 import com.meeweel.translator.databinding.ActivityMainBinding
 import com.meeweel.translator.model.data.AppState
 import com.meeweel.translator.model.data.DataModel
+import com.meeweel.translator.model.datasource.retrofit.isOnline
 import com.meeweel.translator.presenter.Presenter
 import com.meeweel.translator.ui.base.BaseActivity
 import com.meeweel.translator.ui.base.BaseViewModel
 import com.meeweel.translator.ui.base.View
+import com.meeweel.translator.ui.history.HistoryActivity
 import com.meeweel.translator.ui.main.adapter.MainAdapter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -39,7 +42,22 @@ class MainActivity : AppCompatActivity() {
     }
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
-            override fun onClick(searchWord: String) { model.getData(searchWord, true) }
+            override fun onClick(searchWord: String) { model.getData(searchWord, isOnline(this@MainActivity)) }
+        }
+
+    private val fabClickListener3: android.view.View.OnClickListener = android.view.View.OnClickListener {
+        val intent = Intent(this, HistoryActivity::class.java)
+        startActivity(intent)
+    }
+
+    private val fabClickListener2: android.view.View.OnClickListener = android.view.View.OnClickListener {
+        val searchDialogFragment = SearchDialogFragment.newInstance()
+        searchDialogFragment.setOnSearchClickListener(onSearchClickListener2)
+        searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
+    }
+    private val onSearchClickListener2: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
+            override fun onClick(searchWord: String) { model.getData(searchWord, false) }
         }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
@@ -81,6 +99,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         binding.searchFab.setOnClickListener(fabClickListener)
+        binding.searchFab2.setOnClickListener(fabClickListener2)
+        binding.searchFab3.setOnClickListener(fabClickListener3)
         binding.mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
         binding.mainActivityRecyclerview.adapter = adapter
     }
