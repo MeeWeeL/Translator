@@ -14,20 +14,17 @@ import kotlinx.coroutines.*
 class MainViewModel(
     private val interactor: MainInteractor
 ) : ViewModel() {
-//    class MainViewModel @Inject constructor(
-//        private val interactor: MainInteractor
-//    ) : ViewModel() {
     private val viewModelCoroutineScope = CoroutineScope(
-    Dispatchers.Main
-            + SupervisorJob()
-            + CoroutineExceptionHandler { _, throwable ->
-        handleError(throwable)
-    }
+        Dispatchers.Main
+                + SupervisorJob()
+                + CoroutineExceptionHandler { _, throwable ->
+            handleError(throwable)
+        }
     )
 
-    private val liveDataForViewToObserve: MutableLiveData<com.meeweel.model.AppState> = MutableLiveData()
+    private val liveDataForViewToObserve: MutableLiveData<AppState> = MutableLiveData()
 
-    fun liveData(): LiveData<com.meeweel.model.AppState> {
+    fun liveData(): LiveData<AppState> {
         return liveDataForViewToObserve
     }
 
@@ -43,7 +40,7 @@ class MainViewModel(
 
     fun getData(word: String, isOnline: Boolean) {
 //        liveDataWordToSave.value = word
-        liveDataForViewToObserve.value = com.meeweel.model.AppState.Loading(null)
+        liveDataForViewToObserve.value = AppState.Loading(null)
         cancelJob()
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
 //        compositeDisposable.add(

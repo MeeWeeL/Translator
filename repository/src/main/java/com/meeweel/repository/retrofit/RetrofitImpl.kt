@@ -46,4 +46,8 @@ class RetrofitImpl : DataSource<List<com.meeweel.model.DataModel>> {
     override suspend fun getData(): List<com.meeweel.model.DataModel> {
         TODO("Not yet implemented")
     }
+
+    override fun insertList(list: List<DataModel>) {
+        TODO("Not yet implemented")
+    }
 }

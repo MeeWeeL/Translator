@@ -18,26 +18,26 @@ class RepositoryModule {
     @Provides
     @Singleton
     @Named(NAME_REMOTE)
-    internal fun provideRepositoryRemote(@Named(NAME_REMOTE) dataSourceRemote: com.meeweel.repository.DataSource<List<com.meeweel.model.DataModel>>):
-            com.meeweel.repository.Repository<List<com.meeweel.model.DataModel>> =
-        com.meeweel.repository.RepositoryImpl(dataSourceRemote)
+    internal fun provideRepositoryRemote(@Named(NAME_REMOTE) dataSourceRemote: DataSource<List<DataModel>>):
+            Repository<List<DataModel>> =
+        RepositoryImpl(dataSourceRemote)
 
     @Provides
     @Singleton
     @Named(NAME_LOCAL)
-    internal fun provideRepositoryLocal(@Named(NAME_LOCAL) dataSourceLocal: com.meeweel.repository.DataSource<List<com.meeweel.model.DataModel>>):
-            com.meeweel.repository.Repository<List<com.meeweel.model.DataModel>> =
-        com.meeweel.repository.RepositoryImpl(dataSourceLocal)
+    internal fun provideRepositoryLocal(@Named(NAME_LOCAL) dataSourceLocal: DataSource<List<DataModel>>):
+            Repository<List<DataModel>> =
+        RepositoryImpl(dataSourceLocal)
 
     @Provides
     @Singleton
     @Named(NAME_REMOTE)
-    internal fun provideDataSourceRemote(): com.meeweel.repository.DataSource<List<com.meeweel.model.DataModel>> =
-        com.meeweel.repository.retrofit.RetrofitImpl()
+    internal fun provideDataSourceRemote(): DataSource<List<DataModel>> =
+        RetrofitImpl()
 
     @Provides
     @Singleton
     @Named(NAME_LOCAL)
-    internal fun provideDataSourceLocal(dbStorage: DBStorage): com.meeweel.repository.DataSource<List<com.meeweel.model.DataModel>> =
-        com.meeweel.repository.room.RoomDataBaseImpl(dbStorage)
+    internal fun provideDataSourceLocal(dbStorage: DBStorage): DataSource<List<DataModel>> =
+        RoomDataBaseImpl(dbStorage)
 }

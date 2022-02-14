@@ -11,6 +11,8 @@ import com.meeweel.model.AppState
 import com.meeweel.model.DataModel
 //import com.meeweel.translator.ui.description.DescriptionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
+import org.koin.java.KoinJavaComponent
 
 //import com.meeweel.translator.databinding.ActivityHistoryBinding
 //import com.meeweel.translator.model.data.AppState
@@ -21,7 +23,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryBinding
-    private lateinit var model: HistoryViewModel
+    private val historyScope =
+        KoinJavaComponent.getKoin().createScope("historyScope", named("HistoryActivity"))
+    private val model: HistoryViewModel by historyScope.inject()
     private val adapter: HistoryAdapter by lazy { HistoryAdapter(onListItemClickListener) }
 
     private val onListItemClickListener: HistoryAdapter.OnListItemClickListener =
@@ -34,6 +38,7 @@ class HistoryActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
@@ -56,14 +61,14 @@ class HistoryActivity : AppCompatActivity() {
         if (binding.historyActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        val viewModel: HistoryViewModel by viewModel()
-        model = viewModel
         model.subscribe().observe(this@HistoryActivity, Observer<AppState> { renderData(it) })
+        model.getData()
     }
 
     private fun initViews() {
         binding.historyActivityRecyclerview.adapter = adapter
     }
+
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
@@ -72,14 +77,7 @@ class HistoryActivity : AppCompatActivity() {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
                     showViewSuccess()
-                    if (adapter == null) {
-                        binding.historyActivityRecyclerview.layoutManager =
-                            LinearLayoutManager(applicationContext)
-                        binding.historyActivityRecyclerview.adapter =
-                            HistoryAdapter(onListItemClickListener)
-                    } else {
-                        adapter!!.setData(dataModel)
-                    }
+                    adapter.setData(dataModel)
                 }
             }
             is AppState.Loading -> {

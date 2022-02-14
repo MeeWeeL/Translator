@@ -12,4 +12,8 @@ class RepositoryImpl(private val dataSource: com.meeweel.repository.DataSource<L
     override suspend fun getData(): List<com.meeweel.model.DataModel> {
         return dataSource.getData()
     }
+
+    override fun insertList(list: List<DataModel>) {
+        dataSource.insertList(list)
+    }
 }

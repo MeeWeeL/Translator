@@ -1,5 +1,6 @@
 package com.meeweel.historyscreen
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ class HistoryAdapter(private val listener: OnListItemClickListener) : RecyclerVi
 
     private var data: List<DataModel> = arrayListOf()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(data: List<DataModel>) {
         this.data = data
         notifyDataSetChanged()

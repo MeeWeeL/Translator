@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.meeweel.translator.R
 import com.meeweel.translator.databinding.ActivityMainBinding
 import com.meeweel.model.AppState
@@ -15,56 +16,64 @@ import com.meeweel.model.DataModel
 import com.meeweel.repository.retrofit.isOnline
 import com.meeweel.historyscreen.HistoryActivity
 import com.meeweel.translator.ui.main.adapter.MainAdapter
+import com.meeweel.utils.SearchDialogFragment
+import com.meeweel.utils.network.OnlineLiveData
+import com.meeweel.utils.viewById
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
+import org.koin.java.KoinJavaComponent.getKoin
 
 class MainActivity : AppCompatActivity() {
 
 //    @Inject
 //    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-
+    protected var isNetworkAvailable: Boolean = true
     private lateinit var binding: ActivityMainBinding
-    lateinit var model: MainViewModel
+
+    val myScope = getKoin().createScope("myScope",named("MainActivity"))
+    val model: MainViewModel by myScope.inject()
 //    val model: MainViewModel by lazy {
 //        ViewModelProvider(this).get(MainViewModel::class.java) // Saving here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //    }
 
     private val fabClickListener: android.view.View.OnClickListener = android.view.View.OnClickListener {
-        val searchDialogFragment = com.meeweel.utils.SearchDialogFragment.newInstance()
+        val searchDialogFragment = SearchDialogFragment.newInstance()
         searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
         searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
     }
-    private val onSearchClickListener: com.meeweel.utils.SearchDialogFragment.OnSearchClickListener =
-        object : com.meeweel.utils.SearchDialogFragment.OnSearchClickListener {
+    private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) { model.getData(searchWord,
-                com.meeweel.repository.retrofit.isOnline(this@MainActivity)
+                isNetworkAvailable
             ) }
         }
 
     private val fabClickListener3: android.view.View.OnClickListener = android.view.View.OnClickListener {
-        val intent = Intent(this, com.meeweel.historyscreen.HistoryActivity::class.java)
+        val intent = Intent(this, HistoryActivity::class.java)
         startActivity(intent)
     }
 
     private val fabClickListener2: android.view.View.OnClickListener = android.view.View.OnClickListener {
-        val searchDialogFragment = com.meeweel.utils.SearchDialogFragment.newInstance()
+        val searchDialogFragment = SearchDialogFragment.newInstance()
         searchDialogFragment.setOnSearchClickListener(onSearchClickListener2)
         searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
     }
-    private val onSearchClickListener2: com.meeweel.utils.SearchDialogFragment.OnSearchClickListener =
-        object : com.meeweel.utils.SearchDialogFragment.OnSearchClickListener {
+    private val onSearchClickListener2: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) { model.getData(searchWord, false) }
         }
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: com.meeweel.model.DataModel) {
+            override fun onItemClick(data: DataModel) {
                 Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
             }
         }
 
-    private val observer = Observer<com.meeweel.model.AppState> {
+    private val observer = Observer<AppState> {
         renderData(it)
     }
     private var adapter: MainAdapter? = null
+    private val mainActivityRecyclerView by viewById<RecyclerView>(R.id.main_activity_recyclerview)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         iniViewModel()
         initViews()
+        subscribeToNetworkState()
 
 //        model = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 //        model.liveData().observe(this@MainActivity, observer)
@@ -105,18 +115,14 @@ class MainActivity : AppCompatActivity() {
         if (binding.mainActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        // Теперь ViewModel инициализируется через функцию by viewModel()
-        // Это функция, предоставляемая Koin из коробки через зависимость
-        // import org.koin.androidx.viewmodel.ext.android.viewModel
-        val viewModel: MainViewModel by viewModel()
-        model = viewModel
-        model.liveData().observe(this@MainActivity, Observer<com.meeweel.model.AppState> { renderData(it) })
+
+        model.liveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
 
-    private fun renderData(appState: com.meeweel.model.AppState) {
+    private fun renderData(appState: AppState) {
         when (appState) {
-            is com.meeweel.model.AppState.Success -> {
+            is AppState.Success -> {
                 val dataModel = appState.data
                 if (dataModel == null || dataModel.isEmpty()) {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
@@ -132,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            is com.meeweel.model.AppState.Loading -> {
+            is AppState.Loading -> {
                 showViewLoading()
                 if (appState.progress != null) {
                     binding.progressBarHorizontal.visibility = VISIBLE
@@ -143,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                     binding.progressBarRound.visibility = VISIBLE
                 }
             }
-            is com.meeweel.model.AppState.Error -> {
+            is AppState.Error -> {
                 showErrorScreen(appState.error.message)
             }
         }
@@ -173,6 +179,22 @@ class MainActivity : AppCompatActivity() {
         binding.successLinearLayout.visibility = GONE
         binding.loadingFrameLayout.visibility = GONE
         binding.errorLinearLayout.visibility = VISIBLE
+    }
+
+    private fun subscribeToNetworkState() {
+        OnlineLiveData(this).observe(
+            this,
+            {
+                isNetworkAvailable = it
+                if (!isNetworkAvailable) {
+                    Toast.makeText(
+                        this,
+                        "No internet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        )
     }
 
     companion object {

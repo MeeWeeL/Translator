@@ -44,8 +44,8 @@ class DescriptionActivity : AppCompatActivity() {
 //    }
 
     private fun setData() {
-        binding.descriptionHeader.setText(word)
-        binding.descriptionTextview.setText(description)
+        binding.descriptionHeader.text = word
+        binding.descriptionTextview.text = description
         useCoilToLoadPhoto(binding.descriptionImageview, url!!)
 //        val bundle = intent.extras
 //        binding.descriptionHeader.text = bundle?.getString(WORD_EXTRA)
@@ -100,7 +100,7 @@ class DescriptionActivity : AppCompatActivity() {
     }
 
     companion object {
-//
+        //
         private const val DIALOG_FRAGMENT_TAG = "8c7dff51-9769-4f6d-bbee-a3896085e76e"
 //
 //        private const val WORD_EXTRA = "f76a288a-5dcc-43f1-ba89-7fe1d53f63b0"
