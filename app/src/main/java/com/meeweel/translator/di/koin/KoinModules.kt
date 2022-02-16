@@ -11,7 +11,6 @@ import com.meeweel.repository.RepositoryImpl
 import com.meeweel.historyscreen.HistoryInteractorImpl
 import com.meeweel.historyscreen.HistoryViewModel
 import com.meeweel.repository.room.DBStorage
-import com.meeweel.translator.ui.main.MainActivity
 import com.meeweel.translator.ui.main.MainInteractor
 import com.meeweel.translator.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -33,15 +32,13 @@ val application = module {
         )
     }
 }
-// Функция factory сообщает Koin, что эту зависимость нужно создавать каждый
-// раз заново, что как раз подходит для Activity и её компонентов.
+
 val mainScreen = module {
     scope(named("MainActivity")) {
         scoped { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
         viewModel { MainViewModel(get()) }
     }
-//    factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
-//    factory { MainViewModel(get()) }
+
 }
 
 val historyScreen = module {
@@ -49,11 +46,4 @@ val historyScreen = module {
         scoped { HistoryInteractorImpl(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
         viewModel { HistoryViewModel(get()) }
     }
-//    factory { HistoryViewModel(get()) }
-//    factory {
-//        HistoryInteractorImpl(
-//            get(named(NAME_REMOTE)),
-//            get(named(NAME_LOCAL))
-//        )
-//    }
 }

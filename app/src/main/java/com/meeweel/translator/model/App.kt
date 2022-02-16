@@ -14,14 +14,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : Application() {
-//    class App : Application(), HasAndroidInjector {
-
-//    @Inject
-//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
-//    override fun androidInjector(): AndroidInjector<Any> {
-//        return dispatchingAndroidInjector
-//    }
 
     @SuppressLint("StaticFieldLeak")
     object ContextHolder { lateinit var context: Context }
@@ -30,11 +22,6 @@ class App : Application() {
         super.onCreate()
         ContextHolder.context = this
 
-//        DaggerAppComponent.builder()
-//            .application(this)
-//            .build()
-//            .inject(this)
-
         startKoin {
             androidContext(applicationContext)
             modules(listOf(application, mainScreen, historyScreen))
@@ -42,12 +29,12 @@ class App : Application() {
 
     }
 
-    companion object DB {
-        val db: com.meeweel.repository.room.DBStorage by lazy {
-            Room.databaseBuilder(ContextHolder.context,
-                com.meeweel.repository.room.DBStorage::class.java, "translatory.db").build()
-        }
-
-        fun create(): com.meeweel.repository.room.DBStorage = db
-    }
+//    companion object DB {
+//        val db: com.meeweel.repository.room.DBStorage by lazy {
+//            Room.databaseBuilder(ContextHolder.context,
+//                com.meeweel.repository.room.DBStorage::class.java, "translatory.db").build()
+//        }
+//
+//        fun create(): com.meeweel.repository.room.DBStorage = db
+//    }
 }

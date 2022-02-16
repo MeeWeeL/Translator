@@ -5,20 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.meeweel.historyscreen.databinding.ActivityHistoryBinding
 import com.meeweel.model.AppState
 import com.meeweel.model.DataModel
-//import com.meeweel.translator.ui.description.DescriptionActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent
-
-//import com.meeweel.translator.databinding.ActivityHistoryBinding
-//import com.meeweel.translator.model.data.AppState
-//import com.meeweel.translator.model.data.DataModel
-//import com.meeweel.translator.ui.description.DescriptionActivity
-//import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryActivity : AppCompatActivity() {
 
@@ -51,10 +42,6 @@ class HistoryActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         model.getData()
-    }
-
-    fun setDataToAdapter(data: List<DataModel>) {
-        adapter.setData(data)
     }
 
     private fun iniViewModel() {
@@ -99,7 +86,6 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun showErrorScreen(error: String?) {
         showViewError()
-
     }
 
     private fun showViewSuccess() {

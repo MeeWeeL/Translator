@@ -8,33 +8,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.meeweel.translator.R
 import com.meeweel.translator.databinding.ActivityMainBinding
 import com.meeweel.model.AppState
 import com.meeweel.model.DataModel
-import com.meeweel.repository.retrofit.isOnline
 import com.meeweel.historyscreen.HistoryActivity
 import com.meeweel.translator.ui.main.adapter.MainAdapter
 import com.meeweel.utils.SearchDialogFragment
 import com.meeweel.utils.network.OnlineLiveData
-import com.meeweel.utils.viewById
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 
 class MainActivity : AppCompatActivity() {
 
-//    @Inject
-//    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected var isNetworkAvailable: Boolean = true
+    private var isNetworkAvailable: Boolean = true
     private lateinit var binding: ActivityMainBinding
 
-    val myScope = getKoin().createScope("myScope",named("MainActivity"))
+    private val myScope = getKoin().createScope("myScope",named("MainActivity"))
     val model: MainViewModel by myScope.inject()
-//    val model: MainViewModel by lazy {
-//        ViewModelProvider(this).get(MainViewModel::class.java) // Saving here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//    }
 
     private val fabClickListener: android.view.View.OnClickListener = android.view.View.OnClickListener {
         val searchDialogFragment = SearchDialogFragment.newInstance()
@@ -48,17 +39,17 @@ class MainActivity : AppCompatActivity() {
             ) }
         }
 
-    private val fabClickListener3: android.view.View.OnClickListener = android.view.View.OnClickListener {
+    private val fabHistoryClickListener: android.view.View.OnClickListener = android.view.View.OnClickListener {
         val intent = Intent(this, HistoryActivity::class.java)
         startActivity(intent)
     }
 
-    private val fabClickListener2: android.view.View.OnClickListener = android.view.View.OnClickListener {
+    private val fabSearchInStorageClickListener: android.view.View.OnClickListener = android.view.View.OnClickListener {
         val searchDialogFragment = SearchDialogFragment.newInstance()
-        searchDialogFragment.setOnSearchClickListener(onSearchClickListener2)
+        searchDialogFragment.setOnSearchClickListener(onStorageSearchClickListener)
         searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
     }
-    private val onSearchClickListener2: SearchDialogFragment.OnSearchClickListener =
+    private val onStorageSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) { model.getData(searchWord, false) }
         }
@@ -69,15 +60,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    private val observer = Observer<AppState> {
-        renderData(it)
-    }
     private var adapter: MainAdapter? = null
-    private val mainActivityRecyclerView by viewById<RecyclerView>(R.id.main_activity_recyclerview)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -85,40 +70,23 @@ class MainActivity : AppCompatActivity() {
         iniViewModel()
         initViews()
         subscribeToNetworkState()
-
-//        model = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-//        model.liveData().observe(this@MainActivity, observer)
-
-//        binding.searchFab.setOnClickListener {
-//            val searchDialogFragment = SearchDialogFragment.newInstance()
-//            searchDialogFragment.setOnSearchClickListener(object :
-//                SearchDialogFragment.OnSearchClickListener {
-//                override fun onClick(searchWord: String) {
-//                    model.getData(searchWord, true)
-//                }
-//            })
-//            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-//        }
     }
-
 
     private fun initViews() {
         binding.searchFab.setOnClickListener(fabClickListener)
-        binding.searchFab2.setOnClickListener(fabClickListener2)
-        binding.searchFab3.setOnClickListener(fabClickListener3)
+        binding.searchFab2.setOnClickListener(fabSearchInStorageClickListener)
+        binding.searchFab3.setOnClickListener(fabHistoryClickListener)
         binding.mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
         binding.mainActivityRecyclerview.adapter = adapter
     }
 
     private fun iniViewModel() {
-        // Убедимся, что модель инициализируется раньше View
+
         if (binding.mainActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-
         model.liveData().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
-
 
     private fun renderData(appState: AppState) {
         when (appState) {

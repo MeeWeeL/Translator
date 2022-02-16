@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.meeweel.model.AppState
-//import com.meeweel.translator.model.data.AppState
 import kotlinx.coroutines.*
 
 class HistoryViewModel(
