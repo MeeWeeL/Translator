@@ -1,7 +1,11 @@
 package com.meeweel.historyscreen
 
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import coil.ImageLoader
 import coil.request.LoadRequest
@@ -61,6 +65,9 @@ class DescriptionActivity : AppCompatActivity() {
                 onStart = {},
                 onSuccess = { result ->
                     imageView.setImageDrawable(result)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        setBlur()
+                    }
                 },
                 onError = {
                     imageView.setImageResource(R.drawable.ic_no_photo_vector)
@@ -68,6 +75,12 @@ class DescriptionActivity : AppCompatActivity() {
             )
             .build()
         ImageLoader(this).execute(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun setBlur() {
+        val blurEffect = RenderEffect.createBlurEffect(15f,0f, Shader.TileMode.MIRROR)
+        binding.descriptionImageview.setRenderEffect(blurEffect)
     }
 
     companion object {

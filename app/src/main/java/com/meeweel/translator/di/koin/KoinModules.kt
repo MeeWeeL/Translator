@@ -43,7 +43,7 @@ val mainScreen = module {
 
 val historyScreen = module {
     scope(named("HistoryActivity")) {
-        scoped { HistoryInteractorImpl(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
-        viewModel { HistoryViewModel(get()) }
+//        scoped { HistoryInteractorImpl(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
+        viewModel { HistoryViewModel(get(named(NAME_LOCAL))) }
     }
 }
