@@ -4,7 +4,7 @@ import android.app.Application
 import com.meeweel.translator.model.App
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
+//import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Component(

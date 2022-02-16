@@ -1,14 +1,9 @@
 package com.meeweel.translator.ui.main
 
-import com.meeweel.translator.di.NAME_LOCAL
-import com.meeweel.translator.di.NAME_REMOTE
-import com.meeweel.translator.model.data.AppState
-import com.meeweel.translator.model.data.DataModel
-import com.meeweel.translator.model.repository.Repository
-import com.meeweel.translator.presenter.Interactor
-import io.reactivex.rxjava3.core.Observable
-import javax.inject.Inject
-import javax.inject.Named
+import com.meeweel.model.AppState
+import com.meeweel.model.DataModel
+import com.meeweel.repository.Repository
+import com.meeweel.core.base.Interactor
 
 //class MainInteractor @Inject constructor(
 //    @Named(NAME_REMOTE)private val remoteRepository: Repository<List<DataModel>>,
@@ -16,12 +11,12 @@ import javax.inject.Named
 //) : Interactor<AppState> {
 
     class MainInteractor(
-        private val remoteRepository: Repository<List<DataModel>>,
-        private val localRepository: Repository<List<DataModel>>
-    ) : Interactor<AppState> {
+        private val remoteRepository: com.meeweel.repository.Repository<List<com.meeweel.model.DataModel>>,
+        private val localRepository: com.meeweel.repository.Repository<List<com.meeweel.model.DataModel>>
+    ) : com.meeweel.core.base.Interactor<com.meeweel.model.AppState> {
 
-        override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
-            return AppState.Success(
+        override suspend fun getData(word: String, fromRemoteSource: Boolean): com.meeweel.model.AppState {
+            return com.meeweel.model.AppState.Success(
                 if (fromRemoteSource) {
                     remoteRepository
                 } else {

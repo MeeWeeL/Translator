@@ -8,12 +8,9 @@ import androidx.room.Room
 import com.meeweel.translator.di.koin.application
 import com.meeweel.translator.di.koin.historyScreen
 import com.meeweel.translator.di.koin.mainScreen
-import com.meeweel.translator.model.datasource.room.DBStorage
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import org.koin.core.context.GlobalContext.startKoin
-import javax.inject.Inject
+import com.meeweel.repository.room.DBStorage
+//import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.startKoin
 
 class App : Application() {
 //    class App : Application(), HasAndroidInjector {
@@ -44,11 +41,11 @@ class App : Application() {
     }
 
     companion object DB {
-        val db: DBStorage by lazy {
+        val db: com.meeweel.repository.room.DBStorage by lazy {
             Room.databaseBuilder(ContextHolder.context,
-                DBStorage::class.java, "translatory.db").build()
+                com.meeweel.repository.room.DBStorage::class.java, "translatory.db").build()
         }
 
-        fun create(): DBStorage = db
+        fun create(): com.meeweel.repository.room.DBStorage = db
     }
 }
