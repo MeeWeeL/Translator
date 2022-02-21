@@ -9,6 +9,7 @@ import com.meeweel.translator.di.koin.application
 import com.meeweel.translator.di.koin.historyScreen
 import com.meeweel.translator.di.koin.mainScreen
 import com.meeweel.repository.room.DBStorage
+import org.koin.android.ext.koin.androidContext
 //import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.context.startKoin
 
@@ -35,6 +36,7 @@ class App : Application() {
 //            .inject(this)
 
         startKoin {
+            androidContext(applicationContext)
             modules(listOf(application, mainScreen, historyScreen))
         }
 

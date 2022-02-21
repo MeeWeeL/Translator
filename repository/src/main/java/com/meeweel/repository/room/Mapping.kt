@@ -13,7 +13,7 @@ fun convertDataModelToEntity(dataModel: com.meeweel.model.DataModel) : Entity {
     return Entity(dataModel.text ?: "", if (dataModel.meanings != null) gson.toJson(dataModel.meanings)  else "")
 }
 
-fun convertEntityListToDataModelList(list: List<Entity>) : List<com.meeweel.model.DataModel> {
+suspend fun convertEntityListToDataModelList(list: List<Entity>) : List<com.meeweel.model.DataModel> {
     return list.map {
         com.meeweel.model.DataModel(
             it.text,
