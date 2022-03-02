@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.meeweel.model.DataModel
-//import com.meeweel.translator.model.data.DataModel
 
 class HistoryAdapter(private val listener: OnListItemClickListener) : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
 
@@ -43,10 +42,6 @@ class HistoryAdapter(private val listener: OnListItemClickListener) : RecyclerVi
                 itemView.setOnClickListener {
                     openInNewWindow(data)
                 }
-//                itemView.setOnClickListener {
-//                    Toast.makeText(itemView.context, "on click: ${data.text}", Toast.LENGTH_SHORT)
-//                        .show()
-//                }
             }
         }
     }
@@ -54,6 +49,7 @@ class HistoryAdapter(private val listener: OnListItemClickListener) : RecyclerVi
     private fun openInNewWindow(listItemData: DataModel) {
         listener.onItemClick(listItemData)
     }
+
     interface OnListItemClickListener {
         fun onItemClick(data: DataModel)
     }

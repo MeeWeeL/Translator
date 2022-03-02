@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.meeweel.model.AppState
-//import com.meeweel.translator.model.data.AppState
+import com.meeweel.model.DataModel
+import com.meeweel.repository.Repository
 import kotlinx.coroutines.*
 
 class HistoryViewModel(
-    private val interactor: HistoryInteractorImpl
+    private val repo: Repository<List<DataModel>>
 ) : ViewModel() {
     private val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.Main
@@ -31,7 +32,7 @@ class HistoryViewModel(
     }
 
     private suspend fun startInteractor() {
-        liveDataForViewToObserve.postValue(interactor.getData())
+        liveDataForViewToObserve.postValue(AppState.Success(repo.getData()))
     }
 
     private fun handleError(error: Throwable) {

@@ -8,7 +8,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Translator"
 include ':app'
-include ':sample2'
 include ':historyScreen'
 include ':core'
 include ':model'

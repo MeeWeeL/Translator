@@ -8,6 +8,5 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("words/search")
-    fun search(@Query("search") wordToSearch: String): Deferred<List<com.meeweel.model.DataModel>>
-//    fun search(@Query("search") wordToSearch: String): Observable<List<DataModel>>
+    fun search(@Query("search") wordToSearch: String): Deferred<List<DataModel>>
 }

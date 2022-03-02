@@ -9,24 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.meeweel.historyscreen.databinding.ActivityHistoryBinding
 import com.meeweel.model.AppState
 import com.meeweel.model.DataModel
-//import com.meeweel.translator.ui.description.DescriptionActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent
-
-//import com.meeweel.translator.databinding.ActivityHistoryBinding
-//import com.meeweel.translator.model.data.AppState
-//import com.meeweel.translator.model.data.DataModel
-//import com.meeweel.translator.ui.description.DescriptionActivity
-//import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHistoryBinding
     private val historyScope =
         KoinJavaComponent.getKoin().createScope("historyScope", named("HistoryActivity"))
-    private val model: HistoryViewModel by historyScope.inject()
-    private val adapter: HistoryAdapter by lazy { HistoryAdapter(onListItemClickListener) }
 
     private val onListItemClickListener: HistoryAdapter.OnListItemClickListener =
         object : HistoryAdapter.OnListItemClickListener {
@@ -39,6 +29,8 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
+    private val adapter: HistoryAdapter by lazy { HistoryAdapter(onListItemClickListener) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
@@ -50,17 +42,14 @@ class HistoryActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        model.getData()
-    }
-
-    fun setDataToAdapter(data: List<DataModel>) {
-        adapter.setData(data)
+//        model.getData()
     }
 
     private fun iniViewModel() {
         if (binding.historyActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
+        val model: HistoryViewModel by historyScope.inject()
         model.subscribe().observe(this@HistoryActivity, Observer<AppState> { renderData(it) })
         model.getData()
     }
@@ -77,7 +66,14 @@ class HistoryActivity : AppCompatActivity() {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
                     showViewSuccess()
-                    adapter.setData(dataModel)
+                    if (adapter == null) {
+                        binding.historyActivityRecyclerview.layoutManager =
+                            LinearLayoutManager(applicationContext)
+                        binding.historyActivityRecyclerview.adapter =
+                            HistoryAdapter(onListItemClickListener)
+                    } else {
+                        adapter.setData(dataModel)
+                    }
                 }
             }
             is AppState.Loading -> {
@@ -99,7 +95,6 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun showErrorScreen(error: String?) {
         showViewError()
-
     }
 
     private fun showViewSuccess() {

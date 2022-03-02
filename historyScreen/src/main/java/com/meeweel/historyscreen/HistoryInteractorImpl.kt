@@ -3,10 +3,6 @@ package com.meeweel.historyscreen
 import com.meeweel.model.AppState
 import com.meeweel.model.DataModel
 import com.meeweel.repository.Repository
-//import com.meeweel.translator.model.data.AppState
-//import com.meeweel.translator.model.data.DataModel
-//import com.meeweel.translator.model.repository.Repository
-//import com.meeweel.translator.presenter.HistoryInteractor
 
 class HistoryInteractorImpl(
     private val repositoryRemote: Repository<List<DataModel>>,

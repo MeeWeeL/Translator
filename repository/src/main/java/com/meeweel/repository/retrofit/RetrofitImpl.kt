@@ -10,12 +10,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitImpl : DataSource<List<com.meeweel.model.DataModel>> {
+class RetrofitImpl : DataSource<List<DataModel>> {
 
-    override suspend fun getData(word: String): List<com.meeweel.model.DataModel> {
-//    override fun getData(word: String): Observable<List<DataModel>> {
+    override suspend fun getData(word: String): List<DataModel> {
         return getService(BaseInterceptor.interceptor).search(word).await()
-//        return getService(BaseInterceptor.interceptor).search(word)
     }
 
     private fun getService(interceptor: Interceptor): ApiService {
@@ -27,7 +25,6 @@ class RetrofitImpl : DataSource<List<com.meeweel.model.DataModel>> {
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-//            .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
             .client(createOkHttpClient(interceptor))
             .build()
     }
@@ -43,7 +40,7 @@ class RetrofitImpl : DataSource<List<com.meeweel.model.DataModel>> {
         private const val BASE_URL_LOCATIONS = "https://dictionary.skyeng.ru/api/public/v1/"
     }
 
-    override suspend fun getData(): List<com.meeweel.model.DataModel> {
+    override suspend fun getData(): List<DataModel> {
         TODO("Not yet implemented")
     }
 
